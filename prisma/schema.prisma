@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Banner {
+  id          String  @id @default(cuid())
+  title       String  @db.VarChar(150)
+  image       String?
+  description String? @db.VarChar(255)
+  badge       String? @db.VarChar(150)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("banners")
+}
+
+model Category {
+  id          String  @id @default(cuid())
+  name        String  @unique @db.VarChar(150)
+  slug        String  @unique
+  description String? @db.VarChar(255)
+
+  Product Product[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id             String  @id @default(cuid())
+  name           String  @db.VarChar(150)
+  slug           String  @unique
+  price          String  @db.VarChar(50)
+  image          String?
+  discount       Int?    @default(0)
+  description    String? @db.Text
+  tokopedia_link String? @db.VarChar(255)
+  shopee_link    String? @db.VarChar(255)
+  tiktok_link    String? @db.VarChar(255)
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("products")
+}
