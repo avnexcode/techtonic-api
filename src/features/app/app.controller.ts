@@ -1,10 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
-import { WebResponse } from 'src/models/web.model';
 
 @Controller()
 export class AppController {
   @Get()
-  get(): WebResponse {
+  get() {
     return {
       status: true,
       statusCode: 200,
