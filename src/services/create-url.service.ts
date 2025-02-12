@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigurationService } from './configuration.service';
 
-interface UrlBuilderParams {
-  baseUrl: string;
+class UrlBuilderParams {
+  url: string;
   pageNum: number;
   limit?: number;
   search?: string;
@@ -14,8 +15,9 @@ interface UrlBuilderParams {
 
 @Injectable()
 export class CreateUrlService {
+  constructor(private configurationService: ConfigurationService) {}
   createPageUrl({
-    baseUrl,
+    url,
     pageNum,
     limit,
     search,
@@ -48,6 +50,6 @@ export class CreateUrlService {
     }
 
     const queryString = queryParams.toString();
-    return `${baseUrl}${queryString ? '?' + queryString : ''}`;
+    return `${this.configurationService.baseUrl + url}${queryString ? '?' + queryString : ''}`;
   }
 }

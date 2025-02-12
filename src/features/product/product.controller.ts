@@ -112,13 +112,16 @@ export class ProductController {
     @Param('id') id: string,
     @Body() request: CreateProductRequest,
   ): Promise<WebResponse<Product>> {
-    const productPartialUpdated = await this.productService.update(id, request);
+    const productPartialsUpdated = await this.productService.update(
+      id,
+      request,
+    );
 
     return {
       status: true,
       statusCode: 200,
       message: this.responseMessageService.patch('product'),
-      data: productPartialUpdated,
+      data: productPartialsUpdated,
     };
   }
 

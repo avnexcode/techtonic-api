@@ -4,15 +4,67 @@ import {
   CreateBannerRequest,
   UpdateBannerRequest,
 } from 'src/models/banner.model';
+import { QueryParams, QueryResponse } from 'src/models/web.model';
+import { MetaService } from 'src/services/meta.service';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
 export class BannerRepository {
-  constructor(private prismaService: PrismaService) {}
-  async findAll(): Promise<Banner[]> {
-    const banners = await this.prismaService.banner.findMany();
+  constructor(
+    private prismaService: PrismaService,
+    private metaService: MetaService,
+  ) {}
+  async findAll(params: QueryParams): Promise<QueryResponse<Banner>> {
+    const {
+      search = '',
+      page = 1,
+      limit = 10,
+      sortBy = 'created_at',
+      sortOrder = 'desc',
+    } = params;
 
-    return banners;
+    const skip = (page - 1) * limit;
+
+    const [banners, total] = await Promise.all([
+      this.prismaService.banner.findMany({
+        where: {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        take: limit,
+        skip,
+        orderBy: {
+          [sortBy]: sortOrder,
+        },
+      }),
+      this.prismaService.banner.count({
+        where: {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      }),
+    ]);
+
+    const metaParams = {
+      total,
+      page,
+      limit,
+      url: '/banners',
+      search,
+      sortBy,
+      sortOrder,
+    };
+
+    const meta = this.metaService.generateMeta(metaParams);
+
+    return {
+      data: banners,
+      meta,
+    };
   }
 
   async findUniqueId(id: string): Promise<Banner | null> {

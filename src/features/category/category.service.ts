@@ -8,6 +8,7 @@ import {
 import { ValidationService } from 'src/services/validation.service';
 import { CategoryValidation } from 'src/validations/category.validation';
 import { SlugService } from 'src/services/slug.service';
+import { QueryParams, QueryResponse } from 'src/models/web.model';
 
 @Injectable()
 export class CategoryService {
@@ -16,8 +17,8 @@ export class CategoryService {
     private validationService: ValidationService,
     private slugService: SlugService,
   ) {}
-  async getAll(): Promise<Category[]> {
-    const categories = await this.categoryRepository.findAll();
+  async getAll(params: QueryParams): Promise<QueryResponse<Category>> {
+    const categories = await this.categoryRepository.findAll(params);
 
     return categories;
   }

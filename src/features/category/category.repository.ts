@@ -4,20 +4,73 @@ import {
   CreateCategoryRequest,
   UpdateCategoryRequest,
 } from 'src/models/category.model';
+import { QueryParams, QueryResponse } from 'src/models/web.model';
+import { MetaService } from 'src/services/meta.service';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
 export class CategoryRepository {
-  constructor(private prismaService: PrismaService) {}
-  async findAll(): Promise<Category[]> {
-    const categories = await this.prismaService.category.findMany();
+  constructor(
+    private prismaService: PrismaService,
+    private metaService: MetaService,
+  ) {}
+  async findAll(params: QueryParams): Promise<QueryResponse<Category>> {
+    const {
+      search = '',
+      page = 1,
+      limit = 10,
+      sortBy = 'created_at',
+      sortOrder = 'desc',
+    } = params;
 
-    return categories;
+    const skip = (page - 1) * limit;
+
+    const [categories, total] = await Promise.all([
+      this.prismaService.category.findMany({
+        where: {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        take: limit,
+        skip,
+        orderBy: {
+          [sortBy]: sortOrder,
+        },
+      }),
+      this.prismaService.category.count({
+        where: {
+          name: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+      }),
+    ]);
+
+    const meta = this.metaService.generateMeta({
+      total,
+      page,
+      limit,
+      url: '/categories',
+      search,
+      sortBy,
+      sortOrder,
+    });
+
+    return {
+      data: categories,
+      meta,
+    };
   }
 
   async findUniqueId(id: string): Promise<Category | null> {
     const category = await this.prismaService.category.findUnique({
       where: { id },
+      include: {
+        products: true,
+      },
     });
 
     return category;

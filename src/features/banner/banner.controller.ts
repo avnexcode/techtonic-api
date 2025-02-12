@@ -10,9 +10,10 @@ import {
   Patch,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Banner } from '@prisma/client';
-import { WebResponse } from 'src/models/web.model';
+import { QueryResponse, WebResponse } from 'src/models/web.model';
 import { BannerService } from './banner.service';
 import { ResponseMessageService } from 'src/services/response-message.service';
 import {
@@ -30,8 +31,21 @@ export class BannerController {
   @Get()
   @Header('Content-Type', 'application/json')
   @HttpCode(200)
-  async get(): Promise<WebResponse<Banner[]>> {
-    const data = await this.bannerService.getAll();
+  async get(
+    @Query('search') search?: string,
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('sortBy') sortBy?: 'name' | 'created_at',
+    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+  ): Promise<WebResponse<QueryResponse<Banner>>> {
+    const data = await this.bannerService.getAll({
+      search,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+    });
+
     return {
       status: true,
       statusCode: 200,

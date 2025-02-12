@@ -26,7 +26,7 @@ model Category {
   slug        String  @unique
   description String? @db.VarChar(255)
 
-  Product Product[]
+  products Product[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

@@ -6,6 +6,7 @@ import {
 } from 'src/models/product.model';
 import { QueryParams, QueryResponse } from 'src/models/web.model';
 import { CreateUrlService } from 'src/services/create-url.service';
+import { MetaService } from 'src/services/meta.service';
 import { PrismaService } from 'src/services/prisma.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class ProductRepository {
   constructor(
     private prismaService: PrismaService,
     private createUrlService: CreateUrlService,
+    private metaService: MetaService,
   ) {}
 
   async findAll(params: QueryParams): Promise<QueryResponse<Product>> {
@@ -53,43 +55,19 @@ export class ProductRepository {
       }),
     ]);
 
-    const lastPage = Math.ceil(total / limit);
-
-    const baseUrl = 'http://localhost:5000/products';
-    const nextPageUrl =
-      page < lastPage
-        ? this.createUrlService.createPageUrl({
-            baseUrl: baseUrl,
-            pageNum: page + 1,
-            limit,
-            search,
-            sortBy,
-            sortOrder,
-          })
-        : null;
-
-    const prevPageUrl =
-      page > 1
-        ? this.createUrlService.createPageUrl({
-            baseUrl: baseUrl,
-            pageNum: page - 1,
-            limit,
-            search,
-            sortBy,
-            sortOrder,
-          })
-        : null;
+    const meta = this.metaService.generateMeta({
+      total,
+      page,
+      limit,
+      url: '/products',
+      search,
+      sortBy,
+      sortOrder,
+    });
 
     return {
       data: products,
-      meta: {
-        total,
-        page,
-        limit,
-        last_page: lastPage,
-        next_page_url: nextPageUrl,
-        prev_page_url: prevPageUrl,
-      },
+      meta,
     };
   }
 

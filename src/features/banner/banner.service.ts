@@ -7,6 +7,7 @@ import {
   UpdateBannerRequest,
 } from 'src/models/banner.model';
 import { BannerValidation } from 'src/validations/banner.validtion';
+import { QueryParams, QueryResponse } from 'src/models/web.model';
 
 @Injectable()
 export class BannerService {
@@ -15,8 +16,8 @@ export class BannerService {
     private validationService: ValidationService,
   ) {}
 
-  async getAll(): Promise<Banner[]> {
-    const banners = await this.bannerRepository.findAll();
+  async getAll(params: QueryParams): Promise<QueryResponse<Banner>> {
+    const banners = await this.bannerRepository.findAll(params);
     return banners;
   }
 
