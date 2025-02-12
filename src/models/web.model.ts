@@ -27,6 +27,9 @@ export class QueryParams {
   search?: string;
   page?: number;
   limit?: number;
-  sortBy?: 'name' | 'created_at' | 'price';
-  sortOrder?: 'asc' | 'desc';
+  sort?: SortParams;
+  order?: OrderParams;
 }
+
+export type SortParams = 'name' | 'created_at' | 'price' | 'discount';
+export type OrderParams = 'asc' | 'desc';

@@ -6,8 +6,8 @@ class UrlBuilderParams {
   pageNum: number;
   limit?: number;
   search?: string;
-  sortBy?: string;
-  sortOrder?: string;
+  sort?: string;
+  order?: string;
   defaultLimit?: number;
   defaultSortBy?: string;
   defaultSortOrder?: string;
@@ -21,18 +21,16 @@ export class CreateUrlService {
     pageNum,
     limit,
     search,
-    sortBy,
-    sortOrder,
+    sort,
+    order,
     defaultLimit = 10,
     defaultSortBy = 'created_at',
     defaultSortOrder = 'desc',
   }: UrlBuilderParams): string {
     const queryParams = new URLSearchParams();
 
-    // Always add page number
     queryParams.append('page', pageNum.toString());
 
-    // Add other params only if they have values and differ from defaults
     if (limit && limit !== defaultLimit) {
       queryParams.append('limit', limit.toString());
     }
@@ -41,12 +39,12 @@ export class CreateUrlService {
       queryParams.append('search', search);
     }
 
-    if (sortBy && sortBy !== defaultSortBy) {
-      queryParams.append('sortBy', sortBy);
+    if (sort && sort !== defaultSortBy) {
+      queryParams.append('sortBy', sort);
     }
 
-    if (sortOrder && sortOrder !== defaultSortOrder) {
-      queryParams.append('sortOrder', sortOrder);
+    if (order && order !== defaultSortOrder) {
+      queryParams.append('sortOrder', order);
     }
 
     const queryString = queryParams.toString();

@@ -19,8 +19,8 @@ export class BannerRepository {
       search = '',
       page = 1,
       limit = 10,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
+      sort = 'created_at',
+      order = 'desc',
     } = params;
 
     const skip = (page - 1) * limit;
@@ -36,7 +36,7 @@ export class BannerRepository {
         take: limit,
         skip,
         orderBy: {
-          [sortBy]: sortOrder,
+          [sort]: order,
         },
       }),
       this.prismaService.banner.count({
@@ -55,8 +55,8 @@ export class BannerRepository {
       limit,
       url: '/banners',
       search,
-      sortBy,
-      sortOrder,
+      sort,
+      order,
     };
 
     const meta = this.metaService.generateMeta(metaParams);

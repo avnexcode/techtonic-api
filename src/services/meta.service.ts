@@ -8,8 +8,8 @@ class MetaGeneratorParams {
   limit: number;
   url: string;
   search?: string;
-  sortBy?: string;
-  sortOrder?: string;
+  sort?: string;
+  order?: string;
 }
 
 @Injectable()
@@ -22,8 +22,8 @@ export class MetaService {
     limit,
     url,
     search,
-    sortBy,
-    sortOrder,
+    sort,
+    order,
   }: MetaGeneratorParams): MetaResponse {
     const lastPage = Math.ceil(total / limit);
 
@@ -34,8 +34,8 @@ export class MetaService {
             pageNum: page + 1,
             limit,
             search,
-            sortBy,
-            sortOrder,
+            sort,
+            order,
           })
         : null;
 
@@ -46,8 +46,8 @@ export class MetaService {
             pageNum: page - 1,
             limit,
             search,
-            sortBy,
-            sortOrder,
+            sort,
+            order,
           })
         : null;
 

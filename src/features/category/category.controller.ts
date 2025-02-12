@@ -17,7 +17,12 @@ import {
   CreateCategoryRequest,
   UpdateCategoryRequest,
 } from 'src/models/category.model';
-import { QueryResponse, WebResponse } from 'src/models/web.model';
+import {
+  OrderParams,
+  QueryResponse,
+  SortParams,
+  WebResponse,
+} from 'src/models/web.model';
 import { ResponseMessageService } from 'src/services/response-message.service';
 import { CategoryService } from './category.service';
 
@@ -35,15 +40,15 @@ export class CategoryController {
     @Query('search') search?: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-    @Query('sortBy') sortBy?: 'name' | 'created_at',
-    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+    @Query('sort') sort?: SortParams,
+    @Query('order') order?: OrderParams,
   ): Promise<WebResponse<QueryResponse<Category>>> {
     const categories = await this.categoryService.getAll({
       search,
       page,
       limit,
-      sortBy,
-      sortOrder,
+      sort,
+      order,
     });
 
     return {

@@ -13,7 +13,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { Banner } from '@prisma/client';
-import { QueryResponse, WebResponse } from 'src/models/web.model';
+import {
+  OrderParams,
+  QueryResponse,
+  SortParams,
+  WebResponse,
+} from 'src/models/web.model';
 import { BannerService } from './banner.service';
 import { ResponseMessageService } from 'src/services/response-message.service';
 import {
@@ -35,15 +40,15 @@ export class BannerController {
     @Query('search') search?: string,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
-    @Query('sortBy') sortBy?: 'name' | 'created_at',
-    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+    @Query('sort') sort?: SortParams,
+    @Query('order') order?: OrderParams,
   ): Promise<WebResponse<QueryResponse<Banner>>> {
     const data = await this.bannerService.getAll({
       search,
       page,
       limit,
-      sortBy,
-      sortOrder,
+      sort,
+      order,
     });
 
     return {

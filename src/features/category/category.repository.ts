@@ -19,8 +19,8 @@ export class CategoryRepository {
       search = '',
       page = 1,
       limit = 10,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
+      sort = 'created_at',
+      order = 'desc',
     } = params;
 
     const skip = (page - 1) * limit;
@@ -36,7 +36,7 @@ export class CategoryRepository {
         take: limit,
         skip,
         orderBy: {
-          [sortBy]: sortOrder,
+          [sort]: order,
         },
       }),
       this.prismaService.category.count({
@@ -55,8 +55,8 @@ export class CategoryRepository {
       limit,
       url: '/categories',
       search,
-      sortBy,
-      sortOrder,
+      sort,
+      order,
     });
 
     return {

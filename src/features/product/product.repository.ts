@@ -5,7 +5,6 @@ import {
   UpdateProductRequest,
 } from 'src/models/product.model';
 import { QueryParams, QueryResponse } from 'src/models/web.model';
-import { CreateUrlService } from 'src/services/create-url.service';
 import { MetaService } from 'src/services/meta.service';
 import { PrismaService } from 'src/services/prisma.service';
 
@@ -13,7 +12,6 @@ import { PrismaService } from 'src/services/prisma.service';
 export class ProductRepository {
   constructor(
     private prismaService: PrismaService,
-    private createUrlService: CreateUrlService,
     private metaService: MetaService,
   ) {}
 
@@ -22,8 +20,8 @@ export class ProductRepository {
       search = '',
       page = 1,
       limit = 10,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
+      sort = 'created_at',
+      order = 'desc',
     } = params;
 
     const skip = (page - 1) * limit;
@@ -42,7 +40,7 @@ export class ProductRepository {
         take: Number(limit),
         skip,
         orderBy: {
-          [sortBy]: sortOrder,
+          [sort]: order,
         },
       }),
       this.prismaService.product.count({
@@ -61,8 +59,8 @@ export class ProductRepository {
       limit,
       url: '/products',
       search,
-      sortBy,
-      sortOrder,
+      sort,
+      order,
     });
 
     return {
