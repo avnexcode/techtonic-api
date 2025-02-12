@@ -1,6 +1,6 @@
 export class CreateBannerRequest {
   title: string;
-  image?: string;
+  image: string;
   description?: string;
   badge?: string;
 }

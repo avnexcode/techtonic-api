@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
-export interface SlugRepository {
+export type SlugRepository = {
   findSimilarSlugs(baseSlug: string, excludeId?: string): Promise<string[]>;
-}
+};
 
 @Injectable()
 export class SlugService {
