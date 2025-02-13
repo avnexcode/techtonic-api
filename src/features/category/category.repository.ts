@@ -33,7 +33,7 @@ export class CategoryRepository {
             mode: 'insensitive',
           },
         },
-        take: limit,
+        take: Number(limit),
         skip,
         orderBy: {
           [sort]: order,
