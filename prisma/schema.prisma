@@ -43,11 +43,11 @@ model Product {
   image          String
   discount       Int?    @default(0)
   description    String? @db.Text
-  tokopedia_link String? @db.VarChar(255)
-  shopee_link    String? @db.VarChar(255)
+  tokopedia_link String  @db.VarChar(255)
+  shopee_link    String  @db.VarChar(255)
   tiktok_link    String? @db.VarChar(255)
 
-  category_id String?
+  category_id String
   category    Category? @relation(fields: [category_id], references: [id])
 
   created_at DateTime @default(now())
