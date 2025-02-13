@@ -1,11 +1,11 @@
 import { z } from 'zod';
 
 export const createProductRequest = z.object({
-  name: z.string().min(1).max(150).toLowerCase(),
+  name: z.string().min(1).max(150),
   price: z.string().min(1).max(50),
   image: z.string().url(),
   discount: z.number().int().optional(),
-  description: z.string().min(1).toLowerCase().optional(),
+  description: z.string().min(1).optional(),
   tokopedia_link: z.string().url().optional(),
   shopee_link: z.string().url().optional(),
   tiktok_link: z.string().url().optional(),

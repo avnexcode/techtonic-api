@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 export const createCategoryRequest = z.object({
-  name: z.string().min(1).max(150).toLowerCase(),
-  description: z.string().min(1).max(255).toLowerCase().optional(),
+  name: z.string().min(1).max(150),
+  description: z.string().min(1).max(255).optional(),
 });
 
 export const updateCategoryRequest = createCategoryRequest.partial();
